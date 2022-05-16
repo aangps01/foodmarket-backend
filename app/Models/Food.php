@@ -29,12 +29,12 @@ class Food extends Model
 
     public function getCreatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('d/m/Y');
+        return Carbon::parse($value)->timestamp;
     }
 
     public function getUpdatedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('d/m/Y');
+        return Carbon::parse($value)->timestamp;
     }
 
     public function toArray()
