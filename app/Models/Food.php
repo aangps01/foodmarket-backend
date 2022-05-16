@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class Food extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -16,11 +19,35 @@ class Food extends Model
         'price',
         'rating',
         'types',
-        'image',
+        'picturePath',
     ];
 
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('d/m/Y');
+    }
+
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        $array['picturePath'] = $this->picturePath;
+
+        return $array;
+    }
+
+    public function getPicturePathAttribute($value)
+    {
+        return url('') . Storage::url($value);
     }
 }
