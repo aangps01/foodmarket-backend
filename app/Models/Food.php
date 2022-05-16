@@ -18,4 +18,9 @@ class Food extends Model
         'types',
         'image',
     ];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }
