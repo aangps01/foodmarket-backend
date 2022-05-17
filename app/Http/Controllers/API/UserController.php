@@ -81,7 +81,6 @@ class UserController extends Controller
         $token = $request->user()->currentAccessToken()->delete();
 
         return ResponseFormatter::success([
-            'Token' => $token,
             'message' => 'Token Successfuly Revoked'
         ], 'Successfully Logout');
     }

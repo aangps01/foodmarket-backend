@@ -36,13 +36,6 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (AuthenticationException $e, $request) {
-            if ($request->is('api/*')) {
-                return ResponseFormatter::error([
-                    'message' => 'You are not authorized to access this resource'
-                ], 'Unauthorized', 401);
-            }
-        });
 
         $this->reportable(function (Throwable $e) {
             //

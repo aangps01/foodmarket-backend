@@ -9,6 +9,18 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
+
+    public function render($request, Exception $exception)
+    {
+        if ($exception instanceof AuthorizationException) {
+            return ResponseFormatter::error([
+                'message' => 'You are not authorized to access this resource'
+            ], 'Unauthorized', 401);
+        }
+
+        return parent::render($request, $exception);
+    }
+
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      *
