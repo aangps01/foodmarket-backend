@@ -7,6 +7,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\UserLoginRequest;
 use App\Http\Requests\API\UserRegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -51,11 +52,11 @@ class UserController extends Controller
             return ResponseFormatter::success([
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-                'user' => $user
+                'user' => new UserResource($user),
             ], 'Registration Successfully');
         } catch (Exception $e) {
             return ResponseFormatter::error([
-                'message' => 'Something Went Wrong'
+                'message' => $e
             ], 'Registration Failed', 500);
         }
     }
