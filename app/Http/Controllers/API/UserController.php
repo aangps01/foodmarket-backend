@@ -31,7 +31,7 @@ class UserController extends Controller
             return ResponseFormatter::success([
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-                'user' => $user
+                'user' => new UserResource($user)
             ], 'Authentication Successfully');
         } catch (Exception $e) {
             return ResponseFormatter::error([
