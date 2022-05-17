@@ -28,6 +28,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'address',
+        'house_number',
+        'city',
+        'roles',
     ];
 
     /**
@@ -69,5 +74,12 @@ class User extends Authenticatable
     public function getUpdatedAtAttribute($value)
     {
         return Carbon::parse($value)->timestamp;
+    }
+
+    public function setPasswordAttribute($password)
+    {
+        if ($password !== null & $password !== "") {
+            $this->attributes['password'] = bcrypt($password);
+        }
     }
 }
