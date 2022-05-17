@@ -60,4 +60,19 @@ class UserController extends Controller
             ], 'Registration Failed', 500);
         }
     }
+
+    public function getUser()
+    {
+        try {
+            $user = Auth::user();
+
+            return ResponseFormatter::success([
+                'user' => new UserResource($user)
+            ], 'Successfully Retreive User Data');
+        } catch (Exception $e) {
+            return ResponseFormatter::error([
+                'message' => $e
+            ], 'Something Went Wrong', 500);
+        }
+    }
 }
