@@ -2,15 +2,16 @@
 
 namespace App\Http\Requests\API;
 
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Helpers\ResponseFormatter;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use App\Actions\Fortify\PasswordValidationRules;
 
-class UserRegisterRequest extends FormRequest
+class UserUpdateProfileRequest extends FormRequest
 {
     use PasswordValidationRules;
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -26,11 +27,11 @@ class UserRegisterRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($request->user()->id)],
             'password' => $this->passwordRules(),
             'phone' => 'nullable|string|max:15',
             'address' => 'nullable|string',

@@ -7,6 +7,7 @@ use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\UserLoginRequest;
 use App\Http\Requests\API\UserRegisterRequest;
+use App\Http\Requests\API\UserUpdateProfileRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
@@ -83,5 +84,23 @@ class UserController extends Controller
         return ResponseFormatter::success([
             'message' => 'Token Successfuly Revoked'
         ], 'Successfully Logout');
+    }
+
+    public function updateProfile(UserUpdateProfileRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            $user = Auth::user();
+            $user->update($validated);
+
+            return ResponseFormatter::success([
+                'user' => new UserResource($user)
+            ], 'Successfully Update Profile');
+        } catch (Exception $e) {
+            return ResponseFormatter::error([
+                'message' => $e
+            ], 'Something Went Wrong', 500);
+        }
     }
 }
