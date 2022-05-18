@@ -37,6 +37,7 @@ class UserUpdateProfileRequest extends FormRequest
             'address' => 'nullable|string',
             'house_number' => 'nullable|string',
             'city' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 

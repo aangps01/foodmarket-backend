@@ -12,6 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -89,10 +90,18 @@ class UserController extends Controller
     public function updateProfile(UserUpdateProfileRequest $request)
     {
         try {
-            $validated = $request->validated();
+            $validated = $request->safe()->except('image');
+            $imageFile = $request->safe()->only('image');
 
             $user = Auth::user();
             $user->update($validated);
+
+            if ($request->hasFile('image')) {
+                Storage::delete('public/' . $user->profile_photo_path);
+                $filePath = $imageFile['image']->store('assets/user', 'public');
+                $user->profile_photo_path = $filePath;
+                $user->save();
+            }
 
             return ResponseFormatter::success([
                 'user' => new UserResource($user)
