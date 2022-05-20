@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\FoodController;
+use App\Http\Controllers\API\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +23,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
+    Route::get('/food', [FoodController::class, 'getFood']);
 });
