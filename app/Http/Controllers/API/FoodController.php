@@ -10,30 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class FoodController extends Controller
 {
-    public function getFood(Request $request)
+    public function getFoods(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required'
-        ]);
-
-        if ($validator->fails()) {
-            return ResponseFormatter::failedValidation($validator->errors());
-        }
-
-        $food = Food::find($request->id);
-
-        if ($food) {
-            return ResponseFormatter::success($food, 'Successfully get data');
-        }
-
-        return ResponseFormatter::error([
-            'message' => 'Food data with ID: ' . $request->id . " not found"
-        ], 'Data not found', 404);
-    }
-
-    public function getFilteredFoods(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
+            'id' => 'integer',
             'limit' => 'integer|nullable',
             'name' => 'string',
             'type' => 'string',
@@ -43,6 +23,11 @@ class FoodController extends Controller
             'rate_to' => 'integer'
         ]);
 
+        if ($validator->fails()) {
+            return ResponseFormatter::failedValidation($validator->errors());
+        }
+
+        $id = $request->id;
         $limit = $request->limit ?? 5;
         $name = $request->name;
         $type = $request->type;
@@ -52,6 +37,17 @@ class FoodController extends Controller
         $rate_to = $request->rate_to;
 
         $food = Food::query();
+
+        if ($id) {
+            $food = $food->where('id', $id)->get();
+            if ($food->count()) {
+                return ResponseFormatter::success($food, 'Successfully get data');
+            } else {
+                return ResponseFormatter::error([
+                    'message' => 'Food data with id: ' . $id . " not found"
+                ], 'Data not found', 404);
+            }
+        }
 
         if ($name) {
             $food->where('name', 'like', '%' . $name . '%');

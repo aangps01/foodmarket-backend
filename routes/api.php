@@ -23,5 +23,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UserController::class, 'getUser']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::post('/update-profile', [UserController::class, 'updateProfile']);
-    Route::get('/food', [FoodController::class, 'getFood']);
+    Route::get('/food', [FoodController::class, 'getFoods']);
 });
