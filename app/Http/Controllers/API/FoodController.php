@@ -73,7 +73,7 @@ class FoodController extends Controller
             $food->where('rate', '<=', $rate_to);
         }
 
-        $foods = $food->paginate($limit);
+        $foods = $food->paginate($limit)->withQueryString();
         return ResponseFormatter::success(
             $foods,
             'Successfully get data'
